@@ -1,0 +1,24 @@
+# Heavy, regenerable substrate library (grind cells + diagnostics).
+# The repo's job is the apparatus (code + specs + ledgers), not the data;
+# everything here is reproduced by the grinders / falsification scripts.
+library/data/
+library/output/
+
+# Host-specific profiler output (regenerable; keeps env details + key
+# fingerprints out of a public repo).
+dev_profile.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.pytest_cache/
+.mypy_cache/
+
+# Per-machine settings / IDE
+.claude/
+.vscode/
+.idea/
+*.swp
