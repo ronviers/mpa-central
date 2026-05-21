@@ -37,3 +37,5 @@ We're early. The belt is thin in places. Specific predictions need to be sharpen
 Building operationalization machinery for a vocabulary we think is universal, while expecting parts of the vocabulary and the machinery to need refinement, on a methodology that includes AI collaboration because that collaboration is what makes the synthesis tractable at one person's scale. The work either earns its place by producing clarifications, predictions, or tools that other people find useful, or it doesn't. Critics who want to short-circuit that process by attacking the methodology rather than the content are welcome to be on record doing so. History tends to be unkind to that posture.
 
 ---
+
+*Operational complement: [`FALSIFICATION.md`](FALSIFICATION.md) — the live attack fronts, the positive-control ladder, and the standing findings. This essay is the stance; that ledger is the front line.*
