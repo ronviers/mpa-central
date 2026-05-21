@@ -343,6 +343,64 @@ actually robust (the current); the protection is more specific than "no P_ss."
 
 ---
 
+## FINDING 5 — mpa-LEGAL audit: smuggled constant in §Stability RO damping *(2026-05-20)*
+
+**New test class — "mpa-legal" (internal-legality, not substrate-falsification).**
+Character is NESS-against-a-bath: every dynamical quantity must *flow / dissipate /
+be maintained* with the operating point. An **inert constant** (a rate/coupling
+frozen independent of chit) is foreign to character — "a constant does not dissipate
+into the bath." (Same fact as: the char-zero is a square wave, not a constant; the
+literal `constant` substrate sits below the floor; asymptotic-closure boundaries are
+never attained.) The mpa-legal test: *does this quantity flow, or sit inert?*
+
+**First scalp — receipts §13 `γ_RO = γ_s/2 "substrate-fixed"`.** Convicted twice:
+(1) **illegal** — a damping *rate* frozen independent of the operating point while its
+partner ω_RO "tracks the chit"; (2) **wrong by its own cited physics** — deriving from
+the class-B laser rate equations §13 cites (Haken/Siegman) gives
+**γ_RO = (γ_s/2)·e^chit** (carries the pump-ratio factor r=e^chit). The frozen form is
+the threshold (r=1) value with the flow dropped. Consequence: cdv1's
+`Q = √(2L(e^chit−1)/γ_s)` is monotonic-unbounded ("many cycles deep in c"); the legal
+`γ_RO` makes Q **non-monotonic** — ringing band chit∈[≈0.16, ≈1.92], **overdamped at
+both ends** (s = critical *slowing*; deep-c = RO damps out) — the standard class-B
+picture. Cascade: §Stability damping table (wrong at both ends) + §17 active-probe
+S/N=Q both inherit the artifact. Apparatus: `library/ro_damping_audit.py`, PNG
+`ro_damping_audit.png`. (Also rescues the earlier Banach-boundary damping test, whose
+constant-γ_RO was this same smuggle read off the D=0 boundary.)
+
+**Status: LANDED + VALIDATED (2026-05-20).** Closed via a consistent linearization
+of the §Universal two-mode kernel (adjudicated from a two-model outbound scan — the
+winner kept cdv1's ω_RO and pinned κ=2L, amplitude→intensity square-law; the rival
+that "dropped the factor-2" was wrong, depleting the resource ∝amplitude not
+∝intensity). cdv1 §Stability now carries the exact forms (γ_RO=(γ_s/2)e^chit,
+ω_RO=√[2Lγ_s(e^chit−1)−(γ_s/2)²e^{2chit}], non-monotonic Q peaking at chit=ln2).
+**cdv1's corrected Q reproduces the class-B laser Jacobian to machine precision**
+(max|Δ|=6.7e-16; `library/ro_damping_fixed_check.py`, PNG `ro_damping_fixed_check.png`)
+— the framework went from contradicting class-B physics to *being* its eigenstructure.
+Receipts §13 corrected (mpa-legal entry, LANDED). CONSTANT 2 (drive-independent
+current → affinity) also landed (§Topological-drain/§8). The outbound scan also caught
+that one on the just-promoted refinement — both fixes validated. Two new open items:
+ρ amplitude-vs-intensity status (the κ=2L pin); over-provisioning→memory-collapse
+(deep-c Q→0 ⇒ strong phase-lock ⇒ loss of orthogonal trail storage). §17/§Phase-locking
+cascade text owed in cdv1.
+
+---
+
+## FINDING B — conform inversion clamps on underdamped/oscillatory substrates *(2026-05-20)*
+
+**What:** Building the class-B laser conform test (`library/laser_conform_Q.py`), the
+REAL conform inversion (`conformer.compute.inversion.invert`) was fed a laser's
+ringing C(τ), χ(τ) under two cadence choices. It returned **clamped chit ≈ −2 (deep-r)**
+for a laser sitting clearly *above* threshold (c-regime) — nonsense. The monotonic-
+relaxation inversion cannot fit an oscillatory (underdamped) correlation, so it pins
+to a boundary. **First real-substrate instance of the `sine_wave` FINDING 2 gap** (no
+domain gate; the inversion confidently mis-classifies out-of-family data). Distinct
+from the γ_RO finding (that was frame-invariant and stood); this is a conform-pipeline
+fidelity bug. **Status:** demonstrated pipeline gap (conform has no handling for
+underdamped/oscillatory holdings), not an MPA-claim BROKE. Adjudicate alongside
+FINDING 2 when the domain gate / 5-vector inversion work is taken up.
+
+---
+
 ## Open attack fronts (invalidators)
 
 All five built + smoke-passed; cells gridable now. Adjudicate X-dependent
