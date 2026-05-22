@@ -82,7 +82,7 @@ a test once the substrate is shown to honor its own ground truth.
 | 1 | `white_noise` | memoryless dissipative floor, trivial-r | **PASS** — C statistically 0; scatter ∝ σ²/√N (amplitude-invariance is a *scale-awareness* question for the inversion) | not yet |
 | 3 | `ou_equilibrium` | single-exp memory, FDT holds, **X=1** | **PASS** — verified raw χ/(1−C) ≈ 1.0 | (X=1 recovers via two_temp_ou below) |
 | 4 | `two_temp_ou` | known **FDT violation X=T/T_eff** (oracle); C=e^{−τ/τ_relax}, χ=X(1−C) | **PASS** — raw FDR slope = X to ~2% (1.018/0.509/0.102 for 1.0/0.5/0.1) | **PARTIAL — see finding below** |
-| 5 | `kww_oracle` | full 5-vector (q_EA, τ_α, β_KWW, τ_β, X) | NOT BUILT | **BLOCKED** on the 5-vector fitter (see owed work) |
+| 5 | `kww_oracle` | full 5-vector (q_EA, τ_α, β_KWW, τ_β, X) | **BUILT + PASS (2026-05-21)** — full vector round-trips (dimensionless): q_EA 0.7±0.07, τ_α 1.0±0.2, β 0.6±0.08, τ_β 0.05±0.02, X 1.0/0.5/0.2→0.99/0.55/0.26 | **5-vector fitter closed** (multi-start + domain gate) |
 
 **Resolution floor (from `square_wave`):** the apparatus resolves the
 character zero to **±0.03–0.09 in dimensionless f** (tightest mid-regime,
@@ -180,10 +180,14 @@ pass the sine or reject real aging substrates. A clean domain gate needs
 the **5-vector inversion first** (to absorb valid-aging residuals toward
 ~0), after which a residual threshold isolates out-of-domain cases.
 
-**Status:** demonstrated **pipeline gap** (no domain gate), not an
-MPA-claim BROKE — but if MPA claims to police its own domain of validity,
-failing to flag the sine *is* a falsification of that claim. Adjudicate
-once the 5-vector inversion + a residual gate exist.
+**Status: CLOSED 2026-05-21.** The 5-vector inversion now absorbs valid-aging
+residuals (two_temp_ou X=0.1 RMS 0.25 → 0.02) and a residual gate
+(`five_vector.RESIDUAL_GATE`=0.10, `FiveVectorFit.in_domain`) cleanly isolates
+out-of-domain inputs: in-family cells (two_temp_ou, kww_oracle, r-regime glass)
+fit at RMS ~0.01–0.02 → IN; `sine_wave` (cosine) and the running `driven_ring`
+NESS fit at RMS ~0.14–0.45 → flagged OUT. The pipeline now polices its own domain
+of validity. Validated by `mpa-conform/scripts/test_five_vector_fit.py`. (Was: a
+demonstrated pipeline gap pending the 5-vector fitter + gate.)
 
 **Reproduce:** `python H:/mpa-central/library/primitives/sine_wave/grind.py`
 then `python H:/mpa-central/library/diag_inversion.py` (sine block).
@@ -401,6 +405,92 @@ FINDING 2 when the domain gate / 5-vector inversion work is taken up.
 
 ---
 
+## TWO-FRAME gFDR — new claim, self-probe frame first brick *(2026-05-21)*
+
+**The claim (cdv1_receipts STAGED CANDIDATE "two-frame gFDR / §16").** The
+fluctuation-response relation has two conjugate frames. The standard gFDR reads
+the **(amplitude × external field)** pair → violation factor X (the c/s/r aging
+story; needs an external probe). The **self-probe** gFDR reads the **(current ×
+intrinsic affinity)** pair → violation factor is the TUR-tightness
+T = ⟨σ⟩Var(J)/(2⟨J⟩²), measurable core SNR_J = ⟨J⟩²/Var(J) ≤ ⟨σ⟩/2. The self
+frame is **dimensionless by construction** (affinity in nats) and **defined iff a
+current exists** (k_frust-bearing). Harada–Sasa is the bridge: external integrated
+FDR-violation = intrinsic ⟨σ⟩ = J·A. This makes k_frust the *measurement
+reference* — centralizing it as method, not (yet) as spec spine.
+
+**First brick — necessary-consistency / co-onset (`k_frust_two_frame_gfdr.py`,
+PNG `k_frust_two_frame_gfdr.png`).** Interpolate reciprocal→non-reciprocal
+g(λ)=GMAG·(−SYM+λ·CYC); check the self-probe observable is degenerate at detailed
+balance and co-onsets with the external frame. **Result:** λ=0 control ⟨J⟩≈0,
+SNR_J=0.001, |Im(eig)|=0 (self-frame degenerate, as required); rising λ lights up
+all three frames together — **corr(SNR_J, |Im(eig)|)=+0.85**, **corr(SNR_J,
+|χ_J|)=+0.92**. Structural |Im(eig)| is the clean spine (0 at control, linear in
+λ); SNR_J noisier (fluctuation quantity) but unambiguous onset.
+
+**What it shows / doesn't.** SHOWS: the self-probe frame *coheres* — it is
+degenerate at detailed balance, lights up exactly when there is a current to probe
+with, and reads the same broken-detailed-balance transition the external frame
+does. DOES NOT show: the full two-frame **agreement** (self-frame T vs
+external-frame X giving a consistent regime verdict) on a real substrate.
+
+**Second brick — ⟨σ⟩ meter built + tared; T closed *(2026-05-21,
+`two_frame_T_meter.py`, PNG `two_frame_T_meter.png`)*.** A binned
+probability-current entropy-production meter (⟨σ⟩=∫P|v_curr|²/D0,
+v_curr=A−D0∇lnP) was **validated against the exact value**: the
+stable-circulating-focus sub-regime is a 2D rotational OU with ⟨σ⟩=2ω²/κ
+analytically; meter recovers it to ~13% mean error (2% at high σ), reads ≈0 at
+equilibrium, and ⟨J⟩ recovers ω exactly. Tare passed → T=⟨σ⟩τVar(J)/(2⟨J⟩²)
+computed for **both** k_frust sub-regimes (rotational OU = stable focus;
+Stuart–Landau = repelling focus + limit cycle); **TUR floor T≥1 respected
+everywhere a current exists** (limit cycle μ=1 nearly saturates it, T≈1.2; foci
+loose, T~15–32). The self-frame violation factor T is now a measured, validated
+observable — SNR_J → T is closed on the sub-regime models.
+
+**Third brick — external frame X built + tared; two-frame agreement on the
+testbeds *(2026-05-21, `two_frame_T_meter.py` Parts C/D, PNGs
+`two_frame_external_X.png`, `two_frame_external_SL.png`)*.** The genuine external
+frame (not the χ_J proxy): perturbed-response run (constant field h on x), measured
+C_xx(τ) and step response χ(τ), parametric (ΔC, χ) locus. **Tared on rotational OU
+against exact closed forms** C_xx=(D0/κ)e^{−κτ}cos ωτ, χ_step and the asymptotic
+violation V_ext=ω²/[κ(κ²+ω²)] (derived; OU is exactly linear so the response is
+exact at any h): measured V_ext within 5–7%, X(τ→0)≈1 (short-time FDT), V_ext→0 at
+ω=0. Bootstrapped onto Stuart–Landau (no closed form, same validate-on-OU-then-trust
+discipline as the σ-meter): the limit cycle reads near-total FDT suppression
+(χ≈0 loops far below the equilibrium line — the phase Goldstone mode absorbs the
+field), window-robust Δ_FDT=max_τ|χ−ΔC/D0| large. **Two-frame agreement:** external
+violation co-varies with the self-frame ⟨σ⟩ across **both** k_frust sub-regimes
+(equilibrium at ω=0; OU and SL clusters monotone on the Δ_FDT–⟨σ⟩ scatter). SHOWS:
+T and X give the same regime verdict where both are computable, on testbeds with
+controlled ground truth. DOES NOT show: agreement on a **real substrate** (still the
+gate), or exact numerical V_ext=⟨σ⟩ identity (needs the velocity-frame Harada–Sasa
+integral; V_ext/⟨σ⟩ drifts with ω). Limits: Δ_FDT is window-robust not asymptotic,
+so within-SL ordering is unreliable (period > τ_max) — only the cross-regime trend
+is load-bearing; X(τ→0) on SL is not ~1 (off-cycle start + small-h noise + nongradient
+drift), so the SL signal is Δ_FDT + the loops, not the local slope.
+
+**Falsifier / promotion gate.** BROKE for the two-frame claim: a substrate where,
+both probes feasible, self-frame T and external-frame X return **contradictory
+regime verdicts**. Promotion to cdv1_compressed on: (1) calibrated ⟨σ⟩/affinity
+meter closing SNR_J→T *and* two-frame agreement on a real substrate; or (2) the
+payoff — a real substrate read self-probe-only (external probe infeasible) where T
+recovers a verdict the external frame cannot. Same bar §846 holds k_frust to: a
+real cross-substrate instance, not one synthetic loop.
+
+**Owed apparatus.** (a) ⟨σ⟩ meter — **DONE 2026-05-21** (`two_frame_T_meter.py`,
+binned probability-current, validated vs exact rotational-OU 2ω²/κ); remaining: a
+Schnakenberg J·A cross-check + multiplicative-noise/higher-D extension. (b)
+external-frame X measurement — **DONE 2026-05-21** (`two_frame_T_meter.py` Parts
+C/D, tared on rotational OU vs exact V_ext, agreement shown on both sub-regime
+testbeds); remaining: exact V_ext=⟨σ⟩ via the velocity-frame Harada–Sasa integral.
+(c) **the promotion gate proper:** T vs X agreement on a REAL substrate. (d) **Banach hypothesis** (not closure): the self frame is
+dimensionless by construction — the property the dimensionless-Banach dream wants
+— but the current Banach substrate is deterministic (D_noise=0 ⇒ Var(J)=0 ⇒ T
+degenerate) and two-mode (no current); a **frustrated + noisy Banach-class
+extension** whose canonical reference is the dimensionless T is the candidate
+build. See `mpa-conform/docs/banach-substrate-reference.md`.
+
+---
+
 ## Open attack fronts (invalidators)
 
 All five built + smoke-passed; cells gridable now. Adjudicate X-dependent
@@ -423,14 +513,17 @@ when the raw observable can't settle the verdict.
 
 ## Owed work (made concrete by the controls)
 
-1. **5-vector inversion** (lives in mpa-conform). **BLOCKED-IN 2026-05-19**:
-   first-cut scaffold `conformer/compute/five_vector.py::fit_kww5` exists
-   and **recovers X on two_temp_ou to ~1–2%** (X=0.5 → 0.492, X=0.1 →
-   0.098; residual ~0.02 vs the 1-param 0.25). Design + punch list:
+1. **5-vector inversion** (lives in mpa-conform). **CORE CLOSED 2026-05-21**:
+   `conformer/compute/five_vector.py::fit_kww5` recovers X on two_temp_ou to
+   ≤0.01, **round-trips the full 5-vector on kww_oracle**, has **multi-start**
+   seeding, and a **domain-of-validity gate** (`RESIDUAL_GATE`, `in_domain`)
+   that closes FINDING 2 (sine + running driven_ring flagged OUT; in-family IN).
+   Validated by `mpa-conform/scripts/test_five_vector_fit.py`. Design + punch list:
    [`mpa-conform/docs/five_vector_inversion_blockin.md`](../mpa-conform/docs/five_vector_inversion_blockin.md).
-   Closes BOTH findings (X-recovery; and unblocks the FINDING-2 domain
-   gate, since it absorbs valid-aging residuals). Until fully landed +
-   integrated: X read at the raw-slope layer.
+   **Remaining:** integration into `invert()` + the bundle schema; production
+   aging-glass validation (blocked on the library's null `tau_env` below Tc —
+   camera-scale not placed). Until integrated into the production bundle path:
+   X read at the raw-slope layer.
 2. **`kww_oracle` substrate (rung 5)** — **BUILT 2026-05-19/20**:
    `library/primitives/kww_oracle/` (multi-mode OU realizing a genuine
    two-timescale KWW + per-mode FDT-violation). `fit_kww5` round-trips the full
