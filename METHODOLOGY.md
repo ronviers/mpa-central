@@ -2,7 +2,7 @@
 
 Cross-program discipline for what counts as MPA testing. Substrate-neutral, framework-aware, repo-agnostic. Peer to [`RULES.md`](RULES.md) (which handles substrate-implementation discipline) and to the [`mpa-atlas`](https://github.com/ronviers/mpa-atlas) RFCs (which handle protocol contracts).
 
-**Authoritative sources cited.** Framework predictions: [`mpa-atlas/framework/cdv1_compressed.md`](https://github.com/ronviers/mpa-atlas/blob/main/framework/cdv1_compressed.md) (Character projection — cross-substrate testing surface) and [`mpa-atlas/framework/v9_compressed.md`](https://github.com/ronviers/mpa-atlas/blob/main/framework/v9_compressed.md) (structural projection); the operational source of truth post-v8. Characterized cross-substrate evidence: [`H:/mpa-central/library/`](H:/mpa-central/library/LIBRARY_SPEC.md) (sealed lightfield, schema frozen at LIBRARY_SPEC v1.0).
+**Authoritative sources cited.** Framework predictions: [`mpa-atlas/framework/mpav1_compressed.md`](https://github.com/ronviers/mpa-atlas/blob/main/framework/mpav1_compressed.md) — one phenomenology with two readings (the CHARACTER reading is the cross-substrate testing surface; the STRUCTURAL reading is the operator-algebra surface); the operational source of truth post-v8. Characterized cross-substrate evidence: [`H:/mpa-central/library/`](H:/mpa-central/library/LIBRARY_SPEC.md) (sealed lightfield, schema frozen at LIBRARY_SPEC v1.0).
 
 ## RFC stack — what each governs
 

@@ -6,12 +6,11 @@ Substrate-neutral. Substrate-specific findings live in each project's
 
 **Companion: testing methodology.** [`METHODOLOGY.md`](METHODOLOGY.md) is the program-wide testing discipline (substrate scope, evidence scope, artifact scope, infrastructure scope). RULES.md handles substrate-implementation discipline; METHODOLOGY.md handles testing-validation discipline. Together they define what counts as MPA work.
 
-**Theory.** Operational source of truth has migrated from v8 to the v9 + character pair in `mpa-atlas`:
+**Theory.** Operational source of truth has migrated from v8 to the unified `mpav1` document in `mpa-atlas`:
 
-- [`H:\mpa-atlas\framework\v9_compressed.md`](../mpa-atlas/framework/v9_compressed.md) — structural projection (operator algebra, capacity bounds, FDR signatures, Compression Axiom).
-- [`H:\mpa-atlas\framework\character_compressed.md`](../mpa-atlas/framework/character_compressed.md) — character projection (continuous physical economics, chit unit, two-mode kernel, heat-tax tower, gFDR apparatus, ten cascade adoptions).
-- [`H:\mpa-atlas\framework\v9_receipts.md`](../mpa-atlas/framework/v9_receipts.md), [`H:\mpa-atlas\framework\character_receipts.md`](../mpa-atlas/framework/character_receipts.md) — line-keyed justifications.
-- v8 (`v8_MPA_A_Dynamical_Semantics_for_Resource-Bounded_Inference.md`, this directory) is preserved as historical archive; rules that cite v8 sections cite the v9/character equivalent in addition to or in place of v8.
+- [`H:\mpa-atlas\framework\mpav1_compressed.md`](../mpa-atlas/framework/mpav1_compressed.md) — one phenomenology, two readings joined at one spine. The STRUCTURAL reading (operator algebra, capacity bounds, FDR signatures, Compression Axiom) and the CHARACTER reading (continuous physical economics, chit unit, two-mode kernel, heat-tax tower, FDR apparatus, ten cascade adoptions) are the two wings of this single file.
+- [`H:\mpa-atlas\framework\mpav1_receipts.md`](../mpa-atlas/framework/mpav1_receipts.md) — line-keyed justifications.
+- v8 (`v8_MPA_A_Dynamical_Semantics_for_Resource-Bounded_Inference.md`, this directory) is preserved as historical archive; rules that cite v8 sections cite the mpav1 equivalent in addition to or in place of v8.
 
 **Protocol surface.** RFCs in [`H:\mpa-atlas\rfcs\`](../mpa-atlas/rfcs/) (RFC-1 spec object, RFC-2 FDR signatures, RFC-3 consistency, RFC-S scale management, RFC-V vocabulary, RFC-RI realizer interface, RFC-C calibration). Rule 14 below names the RFC-S compliance prerequisite.
 
@@ -39,7 +38,7 @@ the rate-of-change object v8 names.
 
 ## 2. ẋ must be locally bounded in time
 
-v9 §Operators (and character §gFDR signatures) locality requirement: an event at time $s$ has bounded
+mpav1 §Operators (and §FDR signatures) locality requirement: an event at time $s$ has bounded
 effect on observables at later times. Substrates whose natural readout
 violates this (raw stabiliser measurements: one error flips every
 future adjacent stabiliser) require canonical local preprocessing as
@@ -471,7 +470,7 @@ Substrate FDR-prediction tests are framework-canonical only when the substrate e
 
 Substrates currently emit native parameters ($T$, $p_{base}$, $h$) and $\tau_{env}$ analytic placeholders, but not $D$ as a typed canonical observable. Until that gap closes, FDR-prediction tests on substrate data are *substrate-conventional*, not *framework-canonical* — the readings are scientifically real but cannot be cross-substrate compared at the framework's universality-class resolution.
 
-**Operational consequence.** Before claiming a substrate instance of any v9/character cross-substrate observable ($\alpha_s$, $P_s$, $X_c$, $X_r$, $N_f$ — character §"gFDR signatures"; or any of the cascade-earned observables: $Q$, $\omega_{RO}$, $I_{\text{pred}}$, Schnakenberg cycle currents, heavy-traffic queue exponent, etc.), confirm:
+**Operational consequence.** Before claiming a substrate instance of any mpav1 cross-substrate observable ($\alpha_s$, $P_s$, $X_c$, $X_r$, $N_f$ — §"FDR signatures"; or any of the cascade-earned observables: $Q$, $\omega_{RO}$, $I_{\text{pred}}$, Schnakenberg cycle currents, heavy-traffic queue exponent, etc.), confirm:
 
 1. Substrate emits $D$ as a typed quantity on the `init` event (not a derived analytic placeholder).
 2. $\tau_{obs}$ schedule comes from an explicit RFC-S driver profile, not a substrate-default grid.

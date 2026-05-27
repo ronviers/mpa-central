@@ -329,14 +329,14 @@ representation-dependent, which the user reframed into a **falsification ladder*
   circulation; Re flat <0 = stable sub-regime), cooperative control reads
   real-spectrum (resolvable). No gradient/free-energy structure ⇒ irreducible NESS.
 
-**Framework refinement PROMOTED to cdv1_compressed (§Topological drain / §Stability
+**Framework refinement PROMOTED to mpav1_compressed (§Topological drain / §Stability
 / §8).** R3 caught that the literal "no stationary fixed point" mislabels a *stable
 circulating focus* (a genuine k_frust NESS) as resolved — an actual-force derail.
 Refinement: **k_frust is defined by an irreducible NESS — a topologically-forced,
 drive-independent Schnakenberg cycle current (broken detailed balance) — with the
 stable-focus and repelling-focus/limit-cycle as two sub-regimes (sign of Re(eig));
 the complex spectrum, not fixed-point non-existence, is the invariant.** Receipts:
-`cdv1_receipts.md` §Topological-drain/§8 (PROMOTED). The §8-triality-as-numbered-
+`mpav1_receipts.md` §Topological-drain/§8 (PROMOTED). The §8-triality-as-numbered-
 primitive elevation stays steeping (earned by a real cross-substrate instance, not
 one synthetic loop). Sealed predictions (user: survives/topologically protected;
 Claude: ~60-65% survives via re-trapping): both **upheld** for the invariant that's
@@ -407,7 +407,7 @@ FINDING 2 when the domain gate / 5-vector inversion work is taken up.
 
 ## TWO-FRAME gFDR — new claim, self-probe frame first brick *(2026-05-21)*
 
-**The claim (cdv1_receipts STAGED CANDIDATE "two-frame gFDR / §16").** The
+**The claim (mpav1_receipts STAGED CANDIDATE "two-frame gFDR / §16").** The
 fluctuation-response relation has two conjugate frames. The standard gFDR reads
 the **(amplitude × external field)** pair → violation factor X (the c/s/r aging
 story; needs an external probe). The **self-probe** gFDR reads the **(current ×
@@ -468,9 +468,48 @@ so within-SL ordering is unreliable (period > τ_max) — only the cross-regime 
 is load-bearing; X(τ→0) on SL is not ~1 (off-cycle start + small-h noise + nongradient
 drift), so the SL signal is Δ_FDT + the loops, not the local slope.
 
+**Fourth brick — two real substrates run; verdict-agreement gate MET, magnitude
+identity still owed *(2026-05-22, `two_frame_driven_ring.py` / `two_frame_laser.py`,
+PNGs `two_frame_driven_ring.png`, `two_frame_laser.png`)*.** The bricks above are
+synthetic/testbed (a 3-mode loop + rotational-OU + Stuart–Landau). These push both
+frames onto two **real** sustained-current substrates and read the actual numbers.
+
+- **driven_ring** (the framework's own →r-axiom invalidator: overdamped particle on a
+  tilted washboard, A=1, D=0.5; F<A locks, F>A runs a never-decaying current).
+  **Self-frame CLOSED with the EXACT identity** ⟨σ⟩=F⟨θ̇⟩/D = J·A (affinity×current —
+  the Harada–Sasa bridge the laser only approximated; only the constant tilt does net
+  work per revolution). Over F=0.5→3.0: ⟨σ⟩ rises 0.17→17.0 monotonically; TUR floor
+  T≥1 respected on all cells; **T falls 2.35→1.25 (TUR saturation** as the running walk
+  frees). The running F>A cells (gt=s) read as sustained NESS in the self-frame exactly
+  as ground truth says — **the →r axiom does not force r on the never-decaying current.**
+  External frame: the cos-position observable is **drift-dominated** on a running ring
+  (extra drive advances phase → cos falls → response is negative, not fluctuation-
+  response), so X is *not cleanly computable in position coordinates* — the correct
+  conjugate is velocity-frame Harada–Sasa (owed). C(τ) still carries the running
+  signature (locked → localized plateau; running → damped oscillation).
+- **class-B laser** (the cdv1-VALIDATED Jacobian — its Q(χ̇) matches `ro_damping_fixed_check`
+  to 6.7e-16; current is pump-driven RO circulation, diffusion = spontaneous-emission shot
+  noise). **BOTH frames computable.** Self-frame T∈[37.1, 54.7], TUR respected, ⟨J⟩
+  nonzero across the pumped range r=1.1→8. External frame: locus departs the FDT line
+  (D_FDT 0.48→0.94→0.58, peaking at the **RO resonance r=2 / χ̇=ln2**), X(τ→0)≈0.98–1.00.
+  **VERDICT-AGREEMENT:** both frames flag NESS across r>1 — the falsifier (contradictory
+  verdicts) is NOT triggered. But the **magnitudes are different functionals**: ⟨σ⟩ (true
+  dissipation) rises monotonically with pump; normalized external D_FDT peaks at the RO
+  resonance; T (tightness) is loose. **Same verdict, not the same number.**
+
+**Gate status after these runs.** Promotion **criterion (1) — T-vs-X verdict-agreement
+on a *real* substrate — is MET** (the laser: both frames computable, agree on the NESS
+verdict, falsifier not triggered). What is **still owed is the magnitude identity**
+V_ext=⟨σ⟩=J·A *across* the two frames: the laser gives different functionals (verdict
+only), and the ring gives the exact ⟨σ⟩=J·A *within* the self-frame but cannot read the
+external X in position coordinates. The exact cross-frame identity needs the
+**velocity-frame Harada–Sasa integral** (owed apparatus (b)). §846 k_frust bar still NOT
+met: both currents are drive/pump-forced (contingent), not topologically-forced — "real
+substrate with a sustained NESS current" strictly contains "k_frust".
+
 **Falsifier / promotion gate.** BROKE for the two-frame claim: a substrate where,
 both probes feasible, self-frame T and external-frame X return **contradictory
-regime verdicts**. Promotion to cdv1_compressed on: (1) calibrated ⟨σ⟩/affinity
+regime verdicts**. Promotion to mpav1_compressed on: (1) calibrated ⟨σ⟩/affinity
 meter closing SNR_J→T *and* two-frame agreement on a real substrate; or (2) the
 payoff — a real substrate read self-probe-only (external probe infeasible) where T
 recovers a verdict the external frame cannot. Same bar §846 holds k_frust to: a
@@ -482,7 +521,11 @@ Schnakenberg J·A cross-check + multiplicative-noise/higher-D extension. (b)
 external-frame X measurement — **DONE 2026-05-21** (`two_frame_T_meter.py` Parts
 C/D, tared on rotational OU vs exact V_ext, agreement shown on both sub-regime
 testbeds); remaining: exact V_ext=⟨σ⟩ via the velocity-frame Harada–Sasa integral.
-(c) **the promotion gate proper:** T vs X agreement on a REAL substrate. (d) **Banach hypothesis** (not closure): the self frame is
+(c) **the promotion gate proper:** T vs X agreement on a REAL substrate — verdict-
+agreement **DONE 2026-05-22** (laser, fourth brick); the **magnitude identity**
+V_ext=⟨σ⟩=J·A across frames is the remaining teeth, owed to the velocity-frame
+Harada–Sasa integral of (b) — driven_ring is the ideal substrate to close it on (⟨σ⟩
+known exactly). (d) **Banach hypothesis** (not closure): the self frame is
 dimensionless by construction — the property the dimensionless-Banach dream wants
 — but the current Banach substrate is deterministic (D_noise=0 ⇒ Var(J)=0 ⇒ T
 degenerate) and two-mode (no current); a **frustrated + noisy Banach-class

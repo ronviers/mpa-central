@@ -62,7 +62,7 @@ glass tau_env below Tc). When that refresh ships:
   `LIBRARY_SPEC_VERSION` in the grinder, re-grind.
 - Run `python -m conformer.cli test-character` from
   `H:/mpa-conform` and watch the dailies in DJV
-  (`H:\tools\djv\djv-3.4.2-windows-amd64\bin\djv.exe`).
+  (`C:\Program Files\DJV 3.4.2\bin\djv.exe`).
 - The character must round-trip: the library refresh should make
   the shots *more* faithful, not change the substrate's identity.
 

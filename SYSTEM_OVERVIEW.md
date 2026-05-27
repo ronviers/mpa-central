@@ -4,7 +4,9 @@
 how data flows from substrate physics to auditor verdict. For people who want
 to understand the system as a whole before reading any individual repo.
 
-Last refreshed 2026-05-18.
+Last refreshed 2026-05-22 (§2 + §2b at v0.4 / 5-vector). The §4–5
+confidence-apparatus prose still describes the v0.3 audit_delta shape and is
+the next refresh.
 
 ---
 
@@ -36,75 +38,157 @@ End-to-end, what happens when a substrate is characterized and a verdict
 ends up in the auditor:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│   1. substrate physics                                                  │
-│   mpa-solver runs forward simulation per operating point                │
-│   ──▶ multi-window FDR observation rows (τ, C, χ) per cell              │
-└─────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│   2. library packaging                                                  │
-│   mpa-central/library/grind_library.py packages observations as cells   │
-│   ──▶ H:/mpa-central/library/data/{glass,quantum,brain}/<cell>.json     │
-└─────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│   3. canonical-coordinate fitting (two paths, one shape)                │
-│                                                                         │
-│   a. lens-solver: fit_translation_field per substrate batch             │
-│      reads cells, produces mpa_scale_solver.TranslationField            │
-│      (per-cell canonical chit + γ_AB, refined under predictor +         │
-│      regime-band guard; FitDiagnostics container per cell)              │
-│                                                                         │
-│   b. conform/inversion.invert per cell (two-stage analytical +          │
-│      ensemble refine). Independent fit; produces FitResult with         │
-│      its own chit + γ_AB + FitDiagnostics (source='two_stage_inversion')│
-└─────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│   4. confidence apparatus (v0.3)                                        │
-│   conform/calibration: per-substrate baseline percentile lookup,        │
-│   cross-path agreement |chit_two_stage − chit_lens_solver_prior|        │
-│   ──▶ three calibration-free signals per cell                           │
-└─────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│   5. declaration bundle (curator path)                                  │
-│   conform/curator/walk_library.py assembles per-cell                    │
-│   declaration-bundle.v0.3 with fit_provenance + audit_delta carrying:   │
-│   raw fit, predicted locus, per-row residuals, regime label,            │
-│   in_gamut check, fit_diagnostics, diagnostic_percentiles,              │
-│   cross_path_disagreement.                                              │
-│   ──▶ mpa-conform/output/seed-corpus/<class>/<cell>.bundle.json         │
-└─────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│   6. PR into auditor's seed-corpus (file-import boundary)               │
-│   bundles + driver profiles land at mpa-auditor/seed-corpus/ via PR.    │
-│   This is the ONLY place mpa-conform writes into another repo.          │
-└─────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│   7. auditor reads, renders verdict                                     │
-│   mpa-auditor (pure-static browser app, offline after download):        │
-│   reads bundles, applies driver profile, computes audit verdict,        │
-│   badges fits using diagnostic_percentiles + cross-path agreement.      │
-└─────────────────────────────────────────────────────────────────────────┘
+1. substrate physics   (mpa-solver / in-library self-simulators)
+   forward simulation per operating point
+   --> multi-window FDR rows (tau, C, chi) over a tau_obs fan, anchored to tau_env
+        |
+        v
+2. library packaging   (mpa-central/library/grind_library.py)
+   observations packaged as cells; each row carries C_mean/chi_mean + C_sem/chi_sem (grain)
+   --> H:/mpa-central/library/data/<substrate>/<cell>.json
+        |
+        v
+3. canonical-coordinate fitting   (two independent paths, one shape)
+   a. lens-solver fit_translation_field (batched)  --> chit   (TranslationField = ICC profile)
+   b. conform/inversion.invert (two-stage)         --> chit, gamma_AB + FitDiagnostics
+   NOTE: gamma_AB is unobservable from a single-mode locus (RFC-S App.B) -> carried unconstrained
+        |
+        v
+3b. substrate-thermodynamic refinement -- THE 5-VECTOR (the fingerprint)
+   [invert(): live 2026-05-22 | bundle persistence: owed, v0.5]
+   conform/inversion fits KWW+FDT (q_EA, tau_alpha, beta_KWW, tau_beta, X) on
+   dimensionless lag (raw native lag / logged tau_scale -- guarded), per-channel S/N gate
+   --> X + 5-vector + IN/OUT verdict ("could Banach adapt to this data?")
+   surfaced by cmd_invert; curator (walk_library) persistence + schema field still owed
+        |
+        v
+4. confidence apparatus
+   conform/calibration: per-substrate baseline percentiles; cross-path agreement
+   |chit_two_stage - chit_lens|; + per-channel noise-floor gate (residual vs grain)
+        |
+        v
+5. declaration bundle   (curator path, declaration-bundle.v0.4)
+   conform/curator/walk_library.py assembles v0.4:
+   tau = framework lag (= sample.dt); display_tau = community plot axis;
+   observable.data carries C/chi + C_sem/chi_sem; fit_provenance: (chit, gamma_AB),
+   predicted locus, per-row residuals, regime, in_gamut, diagnostics, cross-path.
+   (the 5-vector from 3b is NOT yet persisted here -- owed with the v0.5 bump)
+   --> mpa-conform/output/seed-corpus/<class>/<cell>.bundle.json
+        |
+        v
+6. PR into auditor's seed-corpus   (file-import boundary)
+   bundles + driver profiles land at mpa-auditor/seed-corpus/ via PR.
+   The ONLY place mpa-conform writes into another repo.
+        |
+        v
+7. auditor reads, renders verdict
+   mpa-auditor (pure-static browser app, offline after download): applies driver
+   profile, computes verdict, badges via percentiles + cross-path agreement.
+   (still ingests CSV today; v0.4 bundle ingestion pending)
 ```
 
 **Key property:** the boundary between conform (compute) and auditor (viewer)
 is the *whole* coupling. No callbacks, no live links, no inference of one
 repo's runtime from the other's. Conform writes the bundle; auditor reads
-the bundle. Bundle schema (`declaration-bundle.v0.3.json` today) is the
+the bundle. Bundle schema (`declaration-bundle.v0.4.json` today) is the
 contract.
 
 ---
+
+## 2b. The full characterization → comparison flow (definitive, 2026-05-22)
+
+§2 above is the **audit branch** (substrate → bundle → auditor verdict) and is
+written at v0.3 — it predates the 5-vector refinement, the v0.4 lag/display
+split, and the camera-placement reframe. This section is the **render/compare
+branch** (substrate → Banach overlay), and it carries those newer pieces. Both
+branches share steps 1–4; they fork after canonical translation. Status tags:
+**[live]** implemented and exercised; **[partial]** exists but not wired
+end-to-end; **[open]** designed, not yet solved.
+
+> **Load-bearing principle — the substrate is never touched.** "Conform" means
+> we conform the **Banach analytical reference *to* the substrate's pristine
+> data**, not the reverse. The substrate's empirical (τ, C, χ) sits in the bundle
+> unchanged (native frame); everything we fit, scale, place, or clamp is **Banach**
+> — which is regenerable from a closed form, so "corrupting" it is meaningless.
+> `tau_scale` is logged reversible metadata, not a data edit (native ÷ scale
+> reproduces the fit bit-for-bit). Intents (RFC-S §3) clamp *canonical* states for
+> gamut-mapping and are **not** used for viewing; the viewport's job is
+> non-destructive **view transforms** (e.g. X-faithful) that shape *how Banach is
+> shown beside the data*. Whenever the operand seems to be the substrate, stop —
+> it's Banach.
+
+1. **Substrate, native state** **[live]** — the system in its own environment,
+   intrinsic time, intrinsic τ_env. Bacterial colony, surface code, glass.
+
+2. **Observation & extraction (mpa-solver / grinder)** **[live]** — forward
+   physics extracts two intertwined curves, C(τ) (autocorrelation) and χ(τ)
+   (integrated response), across a fan of observer windows (τ_obs) anchored to
+   the substrate's relaxation timescale τ_env. In-library primitives self-
+   simulate; `grind_library.py` packages.
+
+3. **Library indexing (mpa-central)** **[live]** — crystallized into immutable
+   triples keyed by (substrate, operating-point, ẋ-choice).
+
+4. **Canonical translation — the prism / ICC profile** **[live]** — native data
+   mapped to canonical (chit, γ_AB). Two independent routes both produce it: the
+   lens-solver `TranslationField` (the ICC profile) and `conform/inversion`.
+   chit is **fit**, not looked up — a substrate-specific leading-order rule seeds
+   it (glass chit=Tc−T, surface code chit=ln(p_threshold/p_base)) and the
+   inversion refines it. **γ_AB is structurally unobservable from a single-mode
+   gFDR locus (RFC-S App. B item 4)** — carried unconstrained unless the
+   substrate supplies a phase-locking observable r.
+
+5. **Substrate-thermodynamic refinement — the 5-vector (the fingerprint)**
+   **[live, 2026-05-22]** — beyond the leading-order (chit, γ_AB),
+   `conform/inversion.invert` fits the KWW+FDT 5-vector (q_EA, τ_α, β_KWW, τ_β,
+   **X**) with a per-channel signal-to-noise gate. This is the substrate's
+   *fingerprint*, quantified — the deviation from the universal form that RULES
+   §15 names as the API surface. The gate answers one question: **could the
+   Banach substrate adapt to this data?** (residual within each channel's noise
+   grain → IN; the model can't focus → OUT). Inputs must be fed at dimensionless
+   lag (raw native lag ÷ logged tau_scale), or the fit silently corrupts —
+   guarded in `invert()`.
+
+5b. **Identifiability — per-parameter confidence (the errors we keep)** **[live,
+   2026-05-22]** — ORTHOGONAL to the gate. The domain gate asks "is this in the
+   KWW-FDT family?"; identifiability asks "is each parameter actually *pinned* by
+   the data?" Computed by parametric bootstrap (perturb the data within its grain,
+   refit, measure per-parameter spread): bounded params (q_EA, β, X) gated on
+   absolute std, timescales (τ_α, τ_β) on coefficient of variation, plus a
+   bound-railing check. A fit can be IN-family with **X pinned but the timescales
+   mush** — goodness-of-fit ≠ identifiability. **Read protocol:** trust parameter
+   *p* iff `in_domain ∧ assessable ∧ identified[p]`. Validated against the
+   breakage map (X most robust; τ_β the soft direction). Cells with no grain
+   (zero-filled brain/sir) come back **not assessable** — the honest verdict that
+   closes the degenerate-IN census hole. Surfaced by `cmd_invert`; rides on the
+   `Identifiability` record. *X-faithful etc. are the eventual view-transforms that
+   read this record to foreground the pinned signature and grey the mush.*
+
+6. **Scale management — the camera (conform owns this, via mpa-scale-solver)** —
+   *cadence matching* via the closed-form contraction operator (Cν /
+   Asymptotic-Closure) **[live]**; *camera framing*, setting tau_scale so τ_obs
+   tracks the substrate's intrinsic time and frames the s→r migration interior.
+   The **mechanism is proven scale-invariant** **[live]** — stretching an
+   in-family substrate's relaxation from native to 30 Myr (×10¹³ absolute time,
+   tau_scale tracking) recovers a byte-identical 5-vector; the camera absorbs
+   absolute timescale. What's **open** is conform *auto-deriving* tau_scale + the
+   window when a substrate doesn't declare a clean intrinsic time — placed for
+   glass; not yet placed by us for brain (τ_obs→0 floor) and QEC (τ_obs→∞). This
+   is conform's work, not an external dependency. Camera-tracking is necessary
+   but not sufficient: `voter`/`driven_ring` track the migration yet gate OUT.
+
+7. **Analytical calibration — the Banach reference** **[live]** — closed-form
+   calibration zero, chit(ν)=chit₀·exp(−ν), ν=τ_obs/τ_scale. Pure RG flow, no
+   exotic substrate behavior; the ruler the substrate is read against.
+
+8. **Trajectory rendering (Mode B) & comparative overlay** — 2D parametric
+   overlay (empirical vs Banach in the ΔC–T·χ plane) via
+   `conform/compare/banach_overlay` **[live]**; 3D volumetric particle field
+   (axes γ_AB, log₁₀ν, chit; regime color blue→cyan→green→orange→red) and the
+   paired empirical-vs-Banach Mode B render **[partial]** — shots exist, the
+   bundle→trajectory-render wiring is hand-driven. The **visual divergence is the
+   fingerprint of step 5 made visible**: where the substrate's trajectory pulls
+   away from the smooth Banach reference is exactly where the 5-vector/X lives.
 
 ## 3. mpa-lens-solver in detail
 

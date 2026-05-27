@@ -1,6 +1,6 @@
 """Two-frame gFDR -- FIRST BRICK (self-probe coherence + co-onset).
 
-Claim under construction (cdv1_receipts STAGED CANDIDATE "two-frame gFDR"):
+Claim under construction (mpav1_receipts STAGED CANDIDATE "two-frame gFDR"):
   gFDR has two conjugate frames for the fluctuation-response relation.
    * EXTERNAL frame: (amplitude x external field h) -> violation factor X
                      -- the standard c/s/r aging story; needs an external probe.

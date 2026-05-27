@@ -22,10 +22,13 @@ gFDR has **two conjugate frames** for the fluctuation-response relation.
 
 ## Status (what's done, where it lives)
 
-Staged in [`mpa-atlas/framework/cdv1_receipts.md`](../../mpa-atlas/framework/cdv1_receipts.md)
-as a **STAGED CANDIDATE** (`### §gFDR / §16 — two-frame gFDR …`). NOT promoted to
-`cdv1_compressed` (the peel round-trip is still open; this is method, not spine).
-Ledger: [`FALSIFICATION.md`](../FALSIFICATION.md) §"TWO-FRAME gFDR".
+**PROMOTED 2026-05-22** to `cdv1_compressed` §gFDR signatures ("Two conjugate FDR
+frames"), on verdict-agreement (criterion 1, the laser). Receipts entry
+[`mpa-atlas/framework/cdv1_receipts.md`](../../mpa-atlas/framework/cdv1_receipts.md)
+(`### §gFDR / §16 — two-frame gFDR …`) carries the four bricks + promotion note.
+Ledger: [`FALSIFICATION.md`](../FALSIFICATION.md) §"TWO-FRAME gFDR" (fourth brick).
+The promoted claim is verdict-agreement, NOT magnitude identity; exact cross-frame
+$V_{ext}=\langle\sigma\rangle$ (velocity Harada–Sasa) is a refinement, not a gate.
 
 - **Brick 1 — self-frame coheres + co-onsets** (`library/k_frust_two_frame_gfdr.py`,
   PNG `output/diagnostics/k_frust_two_frame_gfdr.png`). On the 3-mode synthetic
