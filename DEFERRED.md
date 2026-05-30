@@ -142,4 +142,25 @@ the auditor pivot.
 
 ---
 
+## mpa-atlas
+
+### recursion-cascade-demonstrator — applications entry, parked (sketched) *(flagged 2026-05-30)*
+
+A proposed `mpa_applications.md` entry (`recursion-cascade-demonstrator [sketched]`)
+was drafted and explicitly **held** during the 2026-05-29 recursion-cascade session
+(it passed all five ANTI-DRIFT checks; the recommendation was to hold until the
+bootstrap/chiral variant lands, then add the suite whole). It is a computational
+demonstrator that visualizes/calibrates the recursive cascade: the nested-collective
+OU tower showing +1 protected cycle per ascent (`frustration_ascent.py`), the class-B
+node's relaxation-oscillation Q-peak at one ch across the headroom axis
+(`nonlinear_node.py`), and an attractor-characterization suite (`dynamical_tower.py` /
+`delay_tower.py` / `tower_chaos_diagnostic.py`, plus the CLV diagnostic
+`clv_diagnostic.py`). Builds on engine COMPRESSION / TWO FACES / TWO BITS + units §1 +
+frontier `frustration-ascent` / `wall-as-type-boundary`. Scripts live in
+`mpa-conform/scripts/`. Add the suite whole when the joint self-light+cascade instance
+lands (the open `frustration-ascent` coverage gap). The full draft prose is recoverable
+from `recursion_cascade_handoff.md` §D at git tag `pre-reconcile-2026-05-30` (mpa-atlas).
+
+---
+
 ## (other repos — add sections as items appear)
